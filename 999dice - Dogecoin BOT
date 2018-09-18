@@ -1,0 +1,56 @@
+bethigh = true
+chance = 95
+losecount = 0			-- DONT TOUCH
+wincount = 0			-- DONT TOUCH
+nextbet = basebet		-- DONT TOUCH
+basebet = 1.0			-- [ EDIT ] Set bet to start
+loselimit = 100			-- [ EDIT ] Set min value to stop the script
+securebalance = 10		-- [ EDIT ] loselimit - value = secure lose limit
+
+
+function dobet()
+
+if (win) then
+   chance = 95
+   nextbet = basebet
+   losecount = 0
+   wincount += 1
+   print(wincount)
+end
+
+if (wincount >= 19) then
+	resetseed();
+end
+	
+if (!win) then
+	losecount += 1
+	wincount = 0
+	if (balance - securebalance) <= loselimit then
+		print(" ")
+		print("------------------------------------ LOSE LIMIT  ------------------------------------")
+		print(" ")
+		print("You Won: ") print(profit)
+		print(" ")
+		print("Your Balance: ") print(balance)
+		print(" ")
+		print("------------------------------------ LOSE LIMIT  ------------------------------------")
+		print(" ")
+		stop();
+		print(" ")
+	else
+	if (losecount > 1) then
+		nextbet = previousbet*2
+		chance = (1/(((nextbet+(nextbet-basebet))/nextbet)))*100
+	if chance < 49.5 then
+		chance = 49.5 end
+		bethigh = !bethigh
+	else
+		nextbet = previousbet*2
+		chance = (1/(((basebet+nextbet))/nextbet))*100 
+	if chance<49.5 then
+		chance=49.5 end
+		bethigh = !bethigh	
+	end
+   end
+ end
+end
